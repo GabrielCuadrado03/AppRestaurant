@@ -1,0 +1,243 @@
+================================================================================
+          RESTOSUITE PRO / BISTRO & SPECIALTY COFFEE - CONTEXTO DEL PROYECTO
+================================================================================
+Fecha de actualización: 10 de Noviembre de 2026
+Repositorio GitHub: https://github.com/GabrielCuadrado03/AppRestaurant.git
+Rama activa: main
+Tecnologías principales: React 18, TypeScript 5, Vite 5, Tailwind CSS 3, Firebase v10+
+
+--------------------------------------------------------------------------------
+1. RESUMEN EJECUTIVO
+--------------------------------------------------------------------------------
+Sistema integral para restaurantes, bistrós y cafeterías de especialidad de alto
+desempeño. Cubre todo el ciclo de vida del negocio:
+1. Comensales: Menú digital QR mobile-first, llamado a mesero, calificación y CRM.
+2. Salón: App móvil/tablet para meseros con acceso por PIN, plano de mesas y rondas.
+3. Cocina: Monitor KDS táctil pantalla completa, ordenamiento FIFO y alertas de tiempo.
+4. Gerencia local: Panel de control, inventario con semáforo y Business Intelligence.
+5. Superadmin / Master: Consola oculta con Kill Switch, Modo Dios y auditoría de mermas.
+6. Backend Serverless: Firestore con caché offline IndexedDB y Cloud Functions atómicas.
+
+Identidad de Marca Aplicada:
+- Concepto: Bistró botánico y cafetería de especialidad contemporánea.
+- Paleta Cromática Oficial:
+  * Verde Bosque Profundo: #033225 (Botones de acción, acentos activos, branding)
+  * Beige / Arena Cálido:  #DCD7CD (Contrastes, bordes, tarjetas, textos en verde)
+  * Negro Carbono:         #020202 (Tipografía principal de alto contraste)
+  * Fondo Marfil / Lino:   #F7F5F0 (Fondo luminoso orgánico para comensales)
+  * Café Tostado / Cuero:  #4A2016 (Precios y detalles cálidos de especialidad)
+- Tipografía Híbrida:
+  * Encabezados, títulos de plato y logotipo: 'Playfair Display' (Serif editorial)
+  * Textos funcionales, comanderas y números: 'Plus Jakarta Sans' (Sans-serif)
+- Isotipo Vectorial: Forma orgánica de grano de café / hoja botánica en silueta S
+  (implementada en src/components/common/BrandLogo.tsx).
+* NOTA DE MARCA: No utilizar el nombre del PDF de referencia ("Cinnamon"). El sistema
+  usa por defecto "ORIGEN & BISTRO" o cualquier nombre configurable desde el Branding.
+
+--------------------------------------------------------------------------------
+2. ESTRUCTURA COMPLETA DEL CÓDIGO FUENTE
+--------------------------------------------------------------------------------
+F:\AppRestaurant
+├── .gitignore                      # Ignora node_modules, dist, .env, temporales
+├── .env.example                    # Plantilla de variables de entorno de Vite
+├── README.md                       # Documentación técnica pública del repositorio
+├── firestore.rules                 # Reglas de seguridad con isMasterAdmin()
+├── index.html                      # Carga Google Fonts (Playfair Display + Plus Jakarta Sans)
+├── package.json                    # Dependencias frontend (Firebase, Lucide, QRCode, etc.)
+├── postcss.config.js               # PostCSS con Tailwind y Autoprefixer
+├── tailwind.config.js              # Configuración de paleta forest, sand, carbon y fuentes
+├── tsconfig.json                   # Configuración estricta de TypeScript
+├── vite.config.ts                  # Vite con plugin React y define: {'process.env': {}}
+│
+├── functions/                      # Backend Serverless en Cloud Functions
+│   ├── package.json                # firebase-admin ^12.1.0, firebase-functions ^5.0.1
+│   ├── tsconfig.json
+│   └── src/index.ts                # onOrderPaid (trigger) y convertAnonymousCustomer (callable)
+│
+├── scripts/
+│   └── setMasterAdmin.ts           # Script Node.js para asignar custom claim masterAdmin
+│
+└── src/
+    ├── App.tsx                     # Orquestador de vistas, router por path/query y Kill Switch
+    ├── main.tsx                    # Punto de entrada de React 18
+    ├── index.css                   # Tailwind imports, variables CSS :root y @media print
+    ├── vite-env.d.ts               # Tipado de Vite client
+    │
+    ├── lib/
+    │   └── firebase.ts             # Cliente Firebase con inicialización segura y persistencia
+    │
+    ├── types/
+    │   └── index.ts                # Todas las interfaces y tipos TypeScript del sistema
+    │
+    ├── utils/
+    │   ├── audioAlert.ts           # Sintetizador de sonido armónico con Web Audio API (KDS)
+    │   ├── imageCompressor.ts      # Compresor de imágenes a WebP máx 800x800 en Canvas
+    │   └── mockData.ts             # Datos iniciales semilla de categorías y platos gourmet
+    │
+    ├── components/
+    │   ├── common/
+    │   │   └── BrandLogo.tsx       # Logotipo e Isotipo vectorial orgánico en SVG
+    │   │
+    │   ├── waiter/                 # Módulo del Mesero (Etapa 3)
+    │   │   ├── WaiterPinLogin.tsx  # Pantalla de acceso numérico por PIN de 4 dígitos
+    │   │   ├── TableGrid.tsx       # Cuadrícula de mesas con estados (Libre, Ocupada, Cuenta)
+    │   │   ├── OrderPad.tsx        # Comanda táctil con notas, rondas y anulación con PIN
+    │   │   └── WaiterApp.tsx       # Orquestador del módulo mesero y sync con Firestore
+    │   │
+    │   ├── kds/                    # Pantalla de Cocina KDS (Etapa 3)
+    │   │   └── KitchenKds.tsx      # Monitor pantalla completa FIFO con alertas de tiempo
+    │   │
+    │   ├── customer/               # Menú QR Comensales (Etapa 4)
+    │   │   ├── CustomerMenu.tsx    # Menú mobile-first con detección ?table=X y categorías
+    │   │   ├── CustomerIdentityModal.tsx # Modal de captura voluntaria o modo anónimo
+    │   │   └── FeedbackModal.tsx   # Calificación 1-5 estrellas, plato top y fidelización
+    │   │
+    │   ├── master/                 # Consola Oculta Superadmin (Etapa 6)
+    │   │   ├── MasterRouteGuard.tsx # Guard con verificación de claims y 404 simulado
+    │   │   ├── LicenseManager.tsx  # Kill Switch maestro y feature flags en caliente
+    │   │   ├── ImpersonationBar.tsx # Barra flotante del Modo Dios (simular sin contraseñas)
+    │   │   ├── MaintenanceConsole.tsx # Limpieza de órdenes y cierre forzado de mesas
+    │   │   ├── AuditAndHealthMonitor.tsx # Auditoría de cancelaciones y monitor de cuotas
+    │   │   └── BrandingManager.tsx # Personalización de marca e inyección CSS en caliente
+    │   │
+    │   ├── analytics/              # Business Intelligence (Etapa 5)
+    │   │   └── AnalyticsDashboard.tsx # Métricas consolidadas a 1 lectura Firestore por día
+    │   │
+    │   ├── system/
+    │   │   └── SuspendedNotice.tsx # Pantalla mostrada cuando el Kill Switch está activo
+    │   │
+    │   ├── CategoryManager.tsx     # CRUD de categorías y orden de visualización (Etapa 2)
+    │   ├── ProductManager.tsx      # CRUD de platos con toggle de disponibilidad (Etapa 2)
+    │   ├── TableQrGenerator.tsx    # Generador de tarjetas QR imprimibles con @media print
+    │   └── KitchenInventory.tsx    # Inventario con semáforo visual de stock (Etapa 2)
+    │
+    └── pages/
+        ├── AdminDashboard.tsx      # Tablero principal de administración local y BI
+        ├── MasterAdminDashboard.tsx# Consola central del Superadmin / Root Admin
+        └── NotFound.tsx            # Página 404 estándar sin pistas del módulo oculto
+
+--------------------------------------------------------------------------------
+3. DETALLE DE LAS 6 ETAPAS IMPLEMENTADAS
+--------------------------------------------------------------------------------
+
+[ETAPA 1: MODELOS DE DATOS & FIRESTORE OFFLINE]
+- Archivos: src/types/index.ts, firestore.rules, src/lib/firebase.ts
+- Modelos: Product, Category, Order, OrderItem, Customer, Review, InventoryItem, DailyAnalytics.
+- Soporte de rondas/tandas de comanda (currentRound, round).
+- Cancelaciones auditadas (voidReason, authorizedPin, cancellations[]).
+- Persistencia offline: inicializada con initializeFirestore y persistentLocalCache
+  (persistentMultipleTabManager) en Firebase v10+, con fallback a enableIndexedDbPersistence.
+- Reglas: productos públicos en lectura; órdenes restringidas a staff autenticado;
+  reviews restringidas a órdenes entregadas/pagadas; inventario y analíticas privadas.
+
+[ETAPA 2: MÓDULO DE ADMINISTRACIÓN LOCAL]
+- Archivos: src/pages/AdminDashboard.tsx, ProductManager.tsx, CategoryManager.tsx,
+  TableQrGenerator.tsx, KitchenInventory.tsx, ImageUploader.tsx
+- Compresor WebP client-side en Canvas (máx 800x800px, calidad 0.8) en src/utils/imageCompressor.ts.
+- Switch toggle instantáneo en tarjetas de plato para pausar disponibilidad (isAvailable).
+- Generador de tarjetas QR por rango de mesas y zona (qrcode.react) con CSS limpio @media print.
+- Inventario de insumos con semáforo automático (🟢 Disponible, 🟡 Por agotarse, 🔴 Agotado).
+
+[ETAPA 3: OPERACIÓN EN SALÓN Y COCINA EN TIEMPO REAL]
+- Archivos: src/components/waiter/, src/components/kds/KitchenKds.tsx, src/utils/audioAlert.ts
+- Acceso por teclado táctil PIN de 4 dígitos (Carlos: 1234, Laura: 5678, Admin: 9999).
+- Plano de mesas con estados dinámicos (Libre, Ocupada, Cuenta solicitada).
+- Comanda táctil con buscador, notas especiales ("sin cebolla", "término medio") y tandas.
+- Regla de anulación: ítems en PENDING se retiran directo; en PREPARING/READY requieren
+  motivo obligatorio y PIN administrativo, guardando registro en el array cancellations.
+- KDS Pantalla Completa: listener FIFO a órdenes PENDING/PREPARING, semáforo de tiempo
+  (verde <10m, amarillo 10-19m, rojo >20m), botones táctiles "Iniciar" y "Listo para servir".
+- Web Audio API: sintetiza una doble campanada armónica cada vez que entra un nuevo pedido.
+
+[ETAPA 4: EXPERIENCIA DEL CLIENTE MÓVIL (MENÚ QR)]
+- Archivos: src/components/customer/
+- Detección de mesa: lee ?table=X de la URL y lo persiste en localStorage.
+- Identificación progresiva: modal opcional para nombre y WhatsApp, con botón destacado
+  "Ver menú sin registrarme (Modo Anónimo)".
+- Catálogo mobile-first ultraligero con badges visuales para agotados y destacados (TOP).
+- Modal reactivo de valoración: se despliega automáticamente cuando la orden de la mesa
+  pasa a estado DELIVERED o READY. Permite calificar 1-5 estrellas, elegir plato preferido
+  entre los consumidos y chips de tags positivos.
+- Banner de fidelización post-calificación para vincular al CRM de clientes.
+
+[ETAPA 5: BUSINESS INTELLIGENCE & SERVERLESS]
+- Archivos: functions/src/index.ts, src/components/analytics/AnalyticsDashboard.tsx
+- Cloud Function onOrderPaid: trigger atómico en Firestore al pasar a PAID. Incrementa
+  ventas del producto con FieldValue.increment, actualiza /daily_analytics/{YYYY-MM-DD}
+  (ingresos brutos, total órdenes, ticket promedio, horas pico, top productos) y actualiza
+  el acumulado de visitas y consumo del cliente en /customers.
+- Cloud Function convertAnonymousCustomer: callable para transferir órdenes anónimas al CRM.
+- Dashboard BI: lee únicamente el documento diario /daily_analytics/{YYYY-MM-DD} para gastar
+  solo 1 lectura de base de datos. Gráfico Top 5 productos, ranking clientes VIP y muro de reseñas.
+
+[ETAPA 6: CONSOLA OCULTA MASTER ADMIN / SUPERADMIN]
+- Archivos: src/components/master/, src/pages/MasterAdminDashboard.tsx, scripts/setMasterAdmin.ts
+- Ruta secreta configurable por VITE_MASTER_ROUTE (por defecto: /sys-core-x9a7).
+- Cero pistas: sin enlaces en ningún menú ni navbar.
+- MasterRouteGuard: verifica el Custom Claim masterAdmin: true. Si falla o no está autenticado,
+  muestra de inmediato src/pages/NotFound.tsx (404 estándar) sin dar indicios del módulo.
+- Kill Switch: /system_config/license (isSuspended: boolean). Bloquea la app y muestra
+  src/components/system/SuspendedNotice.tsx.
+- Feature Flags: toggles en caliente para qrMenu, kds, crm, reviews, inventory.
+- Modo Dios (Impersonation): barra flotante superior que permite simular la app como Mesero,
+  Cocina KDS o Administrador local en modo interactivo o solo lectura.
+- Consola de Mantenimiento: limpieza de órdenes de prueba y cierre forzado de mesas colgadas.
+- Auditoría de Mermas: cálculo monetario de pérdidas por cancelaciones con autorizador y motivo.
+- Contador de Cuotas: monitor de lecturas y escrituras estimadas vs límites de Firebase Free Tier.
+- Branding en caliente: modifica nombre, logo y colores HEX inyectados en variables CSS :root.
+
+--------------------------------------------------------------------------------
+4. ESTADO ACTUAL DEL PROYECTO
+--------------------------------------------------------------------------------
+- Compilación: Pasa al 100% con 'npm run build' (tsc && vite build) sin errores de tipos.
+- Servidor local de desarrollo: Ejecutándose en http://localhost:5173/
+- Repositorio remoto: Rama 'main' sincronizada y actualizada en GitHub.
+- Configuración de entorno:
+  * Archivo .env.example generado con variables por defecto.
+  * src/lib/firebase.ts protegido contra ReferenceError: process is not defined mediante
+    helpers seguros y valores de contingencia.
+  * vite.config.ts configurado con define: {'process.env': {}}.
+  * Datos semilla incluidos en src/utils/mockData.ts con platos de bistró gourmet.
+
+--------------------------------------------------------------------------------
+5. ACCESOS, RUTAS Y CREDENCIALES PARA PRUEBAS
+--------------------------------------------------------------------------------
+URL Base Local: http://localhost:5173/
+
+A. App del Mesero (Vista predeterminada):
+   - URL: http://localhost:5173/
+   - PINs de acceso demostrativos:
+     * Carlos Mendoza: 1234
+     * Laura Gómez:    5678
+     * Administrador:  9999
+
+B. Menú QR del Comensal:
+   - URL: http://localhost:5173/?table=1 (o cualquier mesa: ?table=5, ?table=12)
+
+C. Monitor KDS de Cocina:
+   - Accesible desde el selector de barra o botón en la app del mesero.
+
+D. Panel de Administración Local & BI:
+   - Pestaña "Administración" en el selector superior.
+
+E. Consola Maestra Superadmin (Módulo Oculto):
+   - URL: http://localhost:5173/sys-core-x9a7
+   - Para asignar el claim a un usuario real de Firebase Auth:
+     npx ts-node scripts/setMasterAdmin.ts <FIREBASE_AUTH_UID>
+
+--------------------------------------------------------------------------------
+6. GUÍA PARA EL PRÓXIMO AGENTE / DESARROLLADOR QUE CONTINÚE
+--------------------------------------------------------------------------------
+Si continúas este proyecto, ten en cuenta los siguientes lineamientos:
+1. Respetar la identidad visual botánica: utiliza siempre los colores del brandbook
+   (#033225, #DCD7CD, #020202, #F7F5F0) y la fuente 'Playfair Display' para títulos.
+2. No usar el nombre "Cinnamon" del PDF; mantener el nombre dinámico o "ORIGEN & BISTRO".
+3. Al conectar un proyecto Firebase de producción:
+   - Crear un archivo .env en la raíz con tus API keys reales basadas en .env.example.
+   - Desplegar las reglas de seguridad con: firebase deploy --only firestore:rules
+   - Desplegar las funciones con: cd functions && npm install && npm run build && firebase deploy --only functions
+4. Tareas potenciales o siguientes pasos sugeridos:
+   - Integración con pasarela de pagos (Stripe, MercadoPago o Wompi) en el flujo del cliente.
+   - Impresión física térmica de tickets (compatibilidad con impresoras POS ESC/POS de 80mm).
+   - Notificaciones WhatsApp mediante Twilio / Meta Cloud API al salir platos de cocina.
+================================================================================
