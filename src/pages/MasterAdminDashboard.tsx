@@ -46,12 +46,12 @@ const DEFAULT_LICENSE: SystemLicense = {
 };
 
 const DEFAULT_BRANDING: SystemBranding = {
-  restaurantName: 'SABOR & FUEGO',
+  restaurantName: 'ORIGEN & BISTRO',
   logoUrl: '',
-  primaryColor: '#ea580c',
-  accentColor: '#f97316',
+  primaryColor: '#033225',
+  accentColor: '#DCD7CD',
   contactPhone: '+57 300 123 4567',
-  contactAddress: 'Av. Gastronómica #10-24'
+  contactAddress: 'Reserva Natural & Jardín Botánico'
 };
 
 export const MasterAdminDashboard: React.FC<MasterAdminDashboardProps> = ({

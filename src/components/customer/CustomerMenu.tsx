@@ -13,6 +13,7 @@ import { db } from '../../lib/firebase';
 import { Product, Category, Order, Review, Customer } from '../../types';
 import { CustomerIdentityModal } from './CustomerIdentityModal';
 import { FeedbackModal } from './FeedbackModal';
+import { BrandLogo } from '../common/BrandLogo';
 import {
   Utensils,
   Search,
@@ -24,7 +25,8 @@ import {
   HelpCircle,
   CheckCircle2,
   Phone,
-  Gift
+  Gift,
+  Coffee
 } from 'lucide-react';
 
 interface CustomerMenuProps {
@@ -201,58 +203,53 @@ export const CustomerMenu: React.FC<CustomerMenuProps> = ({ initialTable }) => {
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans pb-16">
-      {/* Header Mobile-First Ultraligero */}
-      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
+    <div className="min-h-screen bg-[#F7F5F0] flex flex-col font-sans pb-16">
+      {/* Header Mobile-First Ultraligero con Identidad de Marca */}
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#DCD7CD] shadow-xs">
         <div className="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-orange-600 flex items-center justify-center text-white font-extrabold shadow-md shadow-orange-600/20">
-              <Utensils className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="text-xs font-black tracking-tight text-slate-900 block uppercase">
-                SABOR & FUEGO
-              </span>
-              <div className="flex items-center gap-1.5">
-                <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-orange-100 text-orange-800">
-                  Mesa #{tableNumber}
-                </span>
-                {customerInfo && (
-                  <span className="text-[11px] text-slate-500 font-medium truncate max-w-[120px]">
-                    Hola, {customerInfo.name.split(' ')[0]}
-                  </span>
-                )}
-              </div>
-            </div>
+            <BrandLogo
+              size="sm"
+              variant="beige-on-green"
+              showText={true}
+              name="ORIGEN & BISTRO"
+              showSubtitle={false}
+            />
           </div>
 
-          {/* Notificación de Estado de Orden en Mesa */}
-          {activeOrder && (
-            <div className="flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-900 text-white shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-              <span>
-                {activeOrder.status === 'PENDING'
-                  ? 'Recibido'
-                  : activeOrder.status === 'PREPARING'
-                  ? 'En Cocina'
-                  : activeOrder.status === 'READY'
-                  ? '¡Platos Listos!'
-                  : 'Servido'}
-              </span>
-            </div>
-          )}
+          <div className="flex items-center gap-1.5">
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#033225] text-[#DCD7CD]">
+              Mesa #{tableNumber}
+            </span>
+
+            {/* Notificación de Estado de Orden en Mesa */}
+            {activeOrder && (
+              <div className="flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#020202] text-white shadow-xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                <span>
+                  {activeOrder.status === 'PENDING'
+                    ? 'Recibido'
+                    : activeOrder.status === 'PREPARING'
+                    ? 'En Cocina'
+                    : activeOrder.status === 'READY'
+                    ? '¡Listo!'
+                    : 'Servido'}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Buscador Rápido */}
         <div className="max-w-md mx-auto px-4 pb-2.5">
           <div className="relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+            <Search className="w-4 h-4 text-[#877E6F] absolute left-3.5 top-2.5" />
             <input
               type="text"
-              placeholder="¿Qué se te antoja hoy? (ej. Burger, Gin...)"
+              placeholder="¿Qué deseas degustar hoy? (ej. Café, Croissant...)"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-xs pl-9 pr-3 py-2 bg-slate-100 rounded-xl border border-transparent focus:bg-white focus:border-orange-500 focus:ring-1 focus:ring-orange-500 focus:outline-hidden transition"
+              className="w-full text-xs pl-9 pr-3 py-2 bg-[#F7F5F0] rounded-xl border border-[#DCD7CD] focus:bg-white focus:border-[#033225] focus:ring-1 focus:ring-[#033225] focus:outline-hidden transition"
             />
           </div>
         </div>
@@ -263,8 +260,8 @@ export const CustomerMenu: React.FC<CustomerMenuProps> = ({ initialTable }) => {
             onClick={() => setSelectedCategory('ALL')}
             className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition whitespace-nowrap cursor-pointer ${
               selectedCategory === 'ALL'
-                ? 'bg-orange-600 text-white shadow-xs'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                ? 'bg-[#033225] text-[#DCD7CD] shadow-xs'
+                : 'bg-[#F7F5F0] text-[#675F52] hover:bg-[#ECE8DF]'
             }`}
           >
             Todos
@@ -275,8 +272,8 @@ export const CustomerMenu: React.FC<CustomerMenuProps> = ({ initialTable }) => {
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition whitespace-nowrap cursor-pointer ${
                 selectedCategory === cat.id
-                  ? 'bg-orange-600 text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-[#033225] text-[#DCD7CD] shadow-xs'
+                  : 'bg-[#F7F5F0] text-[#675F52] hover:bg-[#ECE8DF]'
               }`}
             >
               {cat.name}
@@ -288,7 +285,7 @@ export const CustomerMenu: React.FC<CustomerMenuProps> = ({ initialTable }) => {
       {/* Lista de Platos Ultraligera y Visual */}
       <main className="max-w-md w-full mx-auto p-4 space-y-3.5">
         {filteredProducts.length === 0 ? (
-          <div className="py-16 text-center text-slate-400 text-xs">
+          <div className="py-16 text-center text-[#877E6F] text-xs">
             No encontramos platos que coincidan con tu búsqueda.
           </div>
         ) : (
@@ -300,12 +297,12 @@ export const CustomerMenu: React.FC<CustomerMenuProps> = ({ initialTable }) => {
                 key={prod.id}
                 className={`bg-white rounded-2xl p-3 border shadow-xs flex gap-3 transition ${
                   prod.isAvailable
-                    ? 'border-slate-200/80 hover:shadow-sm'
-                    : 'border-slate-200 bg-slate-50/70 opacity-60'
+                    ? 'border-[#DCD7CD] hover:border-[#033225] hover:shadow-sm'
+                    : 'border-[#DCD7CD] bg-slate-50/70 opacity-60'
                 }`}
               >
                 {/* Imagen del Plato con Compresión WebP */}
-                <div className="relative w-24 h-24 rounded-xl overflow-hidden bg-slate-100 shrink-0">
+                <div className="relative w-24 h-24 rounded-xl overflow-hidden bg-[#F7F5F0] shrink-0">
                   {prod.imageUrl ? (
                     <img
                       src={prod.imageUrl}
@@ -314,19 +311,19 @@ export const CustomerMenu: React.FC<CustomerMenuProps> = ({ initialTable }) => {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-slate-300">
-                      <Utensils className="w-8 h-8 stroke-[1]" />
+                    <div className="w-full h-full flex items-center justify-center text-[#877E6F]">
+                      <Coffee className="w-8 h-8 stroke-[1]" />
                     </div>
                   )}
 
                   {/* Badge de Plato Agotado o Destacado */}
                   {!prod.isAvailable ? (
-                    <span className="absolute inset-0 bg-slate-900/70 backdrop-blur-2xs flex items-center justify-center text-[10px] font-black uppercase text-white tracking-wider">
+                    <span className="absolute inset-0 bg-[#020202]/70 backdrop-blur-2xs flex items-center justify-center text-[10px] font-black uppercase text-white tracking-wider">
                       Agotado
                     </span>
                   ) : isFeatured ? (
-                    <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-orange-600 text-white text-[9px] font-black uppercase tracking-wider shadow-xs flex items-center gap-0.5">
-                      <Flame className="w-2.5 h-2.5 fill-current" />
+                    <span className="absolute top-1 left-1 px-1.5 py-0.5 rounded-md bg-[#033225] text-[#DCD7CD] text-[9px] font-black uppercase tracking-wider shadow-xs flex items-center gap-0.5">
+                      <Sparkles className="w-2.5 h-2.5 fill-current" />
                       TOP
                     </span>
                   ) : null}
@@ -336,23 +333,23 @@ export const CustomerMenu: React.FC<CustomerMenuProps> = ({ initialTable }) => {
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
                     <div className="flex items-start justify-between gap-1">
-                      <h3 className="text-sm font-extrabold text-slate-900 leading-tight">
+                      <h3 className="text-sm font-serif font-bold text-[#020202] leading-tight">
                         {prod.name}
                       </h3>
                     </div>
-                    <p className="text-[11px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">
+                    <p className="text-[11px] text-[#675F52] mt-1 line-clamp-2 leading-relaxed">
                       {prod.description}
                     </p>
                   </div>
 
-                  <div className="pt-2 flex items-center justify-between">
-                    <span className="text-sm font-extrabold text-orange-600">
+                  <div className="pt-2 flex items-center justify-between border-t border-[#DCD7CD]/40 mt-2">
+                    <span className="text-sm font-black text-[#033225]">
                       ${prod.price.toFixed(2)}
                     </span>
 
                     {prod.ratingAvg && prod.ratingAvg > 0 ? (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-500">
-                        <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#877E6F]">
+                        <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
                         {prod.ratingAvg.toFixed(1)}
                       </span>
                     ) : null}
@@ -365,16 +362,16 @@ export const CustomerMenu: React.FC<CustomerMenuProps> = ({ initialTable }) => {
       </main>
 
       {/* Botón flotante para llamar al mesero o ver estado */}
-      <footer className="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-slate-200/80 p-3 z-30">
+      <footer className="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-[#DCD7CD] p-3 z-30">
         <div className="max-w-md mx-auto flex items-center justify-between gap-2">
-          <div className="text-[11px] text-slate-500">
-            ¿Deseas ordenar o pedir asistencia?
+          <div className="text-[11px] text-[#675F52]">
+            ¿Deseas atención o pedir la cuenta?
           </div>
           <button
             onClick={() => {
-              alert(`¡Un mesero se dirige a la Mesa #${tableNumber}!`);
+              alert(`¡Un camarero se dirige a la Mesa #${tableNumber}!`);
             }}
-            className="px-4 py-2 bg-slate-900 hover:bg-black text-white text-xs font-bold rounded-xl transition shadow-xs cursor-pointer"
+            className="px-4 py-2 bg-[#033225] hover:bg-[#02241A] text-[#DCD7CD] text-xs font-bold rounded-xl transition shadow-xs cursor-pointer border border-[#DCD7CD]/20"
           >
             Llamar al Mesero
           </button>

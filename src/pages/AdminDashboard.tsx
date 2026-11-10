@@ -16,6 +16,7 @@ import { CategoryManager } from '../components/CategoryManager';
 import { TableQrGenerator } from '../components/TableQrGenerator';
 import { KitchenInventory } from '../components/KitchenInventory';
 import { AnalyticsDashboard } from '../components/analytics/AnalyticsDashboard';
+import { BrandLogo } from '../components/common/BrandLogo';
 import {
   Utensils,
   Layers,
@@ -198,40 +199,35 @@ export const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
+    <div className="min-h-screen bg-[#F7F5F0] flex flex-col font-sans">
       {/* Navbar Superior (oculto en impresión) */}
-      <header className="no-print bg-white border-b border-slate-200/80 sticky top-0 z-40">
+      <header className="no-print bg-white border-b border-[#DCD7CD] sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-orange-600 flex items-center justify-center text-white shadow-md shadow-orange-500/20">
-              <ChefHat className="w-6 h-6" />
-            </div>
-            <div>
-              <span className="text-base font-extrabold text-slate-900 tracking-tight flex items-center gap-1.5">
-                RestoSuite Pro <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-orange-100 text-orange-700">BI & ADMIN</span>
-              </span>
-              <span className="text-[11px] text-slate-500 block leading-none">
-                Sistema Integral de Inteligencia & Gestión
-              </span>
-            </div>
+            <BrandLogo
+              size="md"
+              variant="beige-on-green"
+              name="ORIGEN & BISTRO"
+              subtitle="PANEL DE ADMINISTRACIÓN & BI"
+            />
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="hidden sm:inline-flex items-center gap-1.5 text-xs text-slate-500 font-medium px-3 py-1.5 rounded-lg bg-slate-100">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+            <span className="hidden sm:inline-flex items-center gap-1.5 text-xs text-[#675F52] font-medium px-3 py-1.5 rounded-xl bg-[#F7F5F0] border border-[#DCD7CD]">
+              <ShieldCheck className="w-4 h-4 text-[#033225]" />
               BI Serverless Optimizado
             </span>
           </div>
         </div>
 
         {/* Pestañas de Navegación */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-1 overflow-x-auto border-t border-slate-100 scrollbar-none">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-1 overflow-x-auto border-t border-[#DCD7CD]/60 scrollbar-none">
           <button
             onClick={() => setCurrentTab('analytics')}
             className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition whitespace-nowrap cursor-pointer ${
               currentTab === 'analytics'
-                ? 'border-orange-600 text-orange-600'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
+                ? 'border-[#033225] text-[#033225]'
+                : 'border-transparent text-[#877E6F] hover:text-[#020202]'
             }`}
           >
             <BarChart3 className="w-4 h-4" />
@@ -242,8 +238,8 @@ export const AdminDashboard: React.FC = () => {
             onClick={() => setCurrentTab('products')}
             className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition whitespace-nowrap cursor-pointer ${
               currentTab === 'products'
-                ? 'border-orange-600 text-orange-600'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
+                ? 'border-[#033225] text-[#033225]'
+                : 'border-transparent text-[#877E6F] hover:text-[#020202]'
             }`}
           >
             <Utensils className="w-4 h-4" />
@@ -254,8 +250,8 @@ export const AdminDashboard: React.FC = () => {
             onClick={() => setCurrentTab('categories')}
             className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition whitespace-nowrap cursor-pointer ${
               currentTab === 'categories'
-                ? 'border-orange-600 text-orange-600'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
+                ? 'border-[#033225] text-[#033225]'
+                : 'border-transparent text-[#877E6F] hover:text-[#020202]'
             }`}
           >
             <Layers className="w-4 h-4" />
@@ -266,8 +262,8 @@ export const AdminDashboard: React.FC = () => {
             onClick={() => setCurrentTab('qr')}
             className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition whitespace-nowrap cursor-pointer ${
               currentTab === 'qr'
-                ? 'border-orange-600 text-orange-600'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
+                ? 'border-[#033225] text-[#033225]'
+                : 'border-transparent text-[#877E6F] hover:text-[#020202]'
             }`}
           >
             <QrCode className="w-4 h-4" />
@@ -278,8 +274,8 @@ export const AdminDashboard: React.FC = () => {
             onClick={() => setCurrentTab('inventory')}
             className={`flex items-center gap-2 px-4 py-3 text-xs font-bold border-b-2 transition whitespace-nowrap cursor-pointer ${
               currentTab === 'inventory'
-                ? 'border-orange-600 text-orange-600'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
+                ? 'border-[#033225] text-[#033225]'
+                : 'border-transparent text-[#877E6F] hover:text-[#020202]'
             }`}
           >
             <Boxes className="w-4 h-4" />

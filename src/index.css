@@ -2,10 +2,39 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --brand-primary: #033225; /* Verde Bosque #033225 */
+  --brand-accent: #DCD7CD;  /* Beige Cálido #DCD7CD */
+  --brand-black: #020202;   /* Negro Carbono #020202 */
+  --brand-bg: #F7F5F0;      /* Arena / Fondo Claro */
+}
+
 @layer base {
   body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #F7F5F0;
+    color: #020202;
   }
+
+  h1, h2, h3, .font-editorial {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+}
+
+/* Scrollbar minimalista y elegante */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #DCD7CD;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C7C0B2;
 }
 
 /* Optimización para impresión limpia de QRs */

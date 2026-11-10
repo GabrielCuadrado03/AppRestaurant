@@ -18,6 +18,7 @@ import { MasterRouteGuard } from './components/master/MasterRouteGuard';
 import { ImpersonationBar } from './components/master/ImpersonationBar';
 import { SuspendedNotice } from './components/system/SuspendedNotice';
 import { NotFound } from './pages/NotFound';
+import { BrandLogo } from './components/common/BrandLogo';
 import {
   Smartphone,
   Tv,
@@ -177,22 +178,24 @@ export const App: React.FC = () => {
     <div className="min-h-screen bg-slate-900 flex flex-col font-sans">
       {/* Selector de Vistas / Switcher (oculto en modo KDS y en impresión) */}
       {currentView !== 'kds' && (
-        <aside className="no-print bg-slate-950 border-b border-slate-800 text-slate-300 px-4 py-2 flex items-center justify-between text-xs">
+        <aside className="no-print bg-[#02241A] border-b border-[#033225] text-[#DCD7CD] px-4 py-2 flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-orange-500" />
-            <span className="font-extrabold text-white">
-              {branding?.restaurantName || 'RestoSuite'}
-            </span>
+            <BrandLogo
+              size="sm"
+              variant="beige-on-green"
+              name={branding?.restaurantName || 'ORIGEN & BISTRO'}
+              showSubtitle={false}
+            />
           </div>
 
-          <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-xl border border-slate-800 overflow-x-auto">
+          <div className="flex items-center gap-1 bg-[#011710] p-1 rounded-xl border border-[#033225] overflow-x-auto">
             {license?.featureFlags?.qrMenu !== false && (
               <button
                 onClick={() => setCurrentView('customer')}
                 className={`flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold transition cursor-pointer whitespace-nowrap ${
                   currentView === 'customer'
-                    ? 'bg-orange-600 text-white shadow-xs'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-[#033225] text-[#DCD7CD] shadow-xs'
+                    : 'text-[#DCD7CD]/60 hover:text-white'
                 }`}
               >
                 <QrCode className="w-3.5 h-3.5" />
@@ -204,8 +207,8 @@ export const App: React.FC = () => {
               onClick={() => setCurrentView('waiter')}
               className={`flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold transition cursor-pointer whitespace-nowrap ${
                 currentView === 'waiter'
-                  ? 'bg-orange-600 text-white shadow-xs'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#033225] text-[#DCD7CD] shadow-xs'
+                  : 'text-[#DCD7CD]/60 hover:text-white'
               }`}
             >
               <Smartphone className="w-3.5 h-3.5" />
@@ -217,8 +220,8 @@ export const App: React.FC = () => {
                 onClick={() => setCurrentView('kds')}
                 className={`flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold transition cursor-pointer whitespace-nowrap ${
                   currentView === 'kds'
-                    ? 'bg-orange-600 text-white shadow-xs'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-[#033225] text-[#DCD7CD] shadow-xs'
+                    : 'text-[#DCD7CD]/60 hover:text-white'
                 }`}
               >
                 <Tv className="w-3.5 h-3.5" />
@@ -230,8 +233,8 @@ export const App: React.FC = () => {
               onClick={() => setCurrentView('admin')}
               className={`flex items-center gap-1.5 px-3 py-1 rounded-lg font-bold transition cursor-pointer whitespace-nowrap ${
                 currentView === 'admin'
-                  ? 'bg-orange-600 text-white shadow-xs'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#033225] text-[#DCD7CD] shadow-xs'
+                  : 'text-[#DCD7CD]/60 hover:text-white'
               }`}
             >
               <Settings className="w-3.5 h-3.5" />

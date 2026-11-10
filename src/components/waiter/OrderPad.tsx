@@ -227,32 +227,32 @@ export const OrderPad: React.FC<OrderPadProps> = ({
   });
 
   return (
-    <div className="min-h-screen bg-slate-100 flex flex-col">
+    <div className="min-h-screen bg-[#F7F5F0] flex flex-col font-sans">
       {/* Top Bar Móvil / Tablet */}
-      <header className="bg-slate-900 text-white px-4 py-3 sticky top-0 z-30 shadow-md">
+      <header className="bg-[#033225] text-white px-4 py-3 sticky top-0 z-30 shadow-md">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
               onClick={onBack}
-              className="p-1.5 bg-slate-800 hover:bg-slate-700 rounded-xl transition text-slate-300"
+              className="p-1.5 bg-[#02241A] hover:bg-[#011710] rounded-xl transition text-[#DCD7CD]"
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
             <div>
-              <h1 className="text-base font-extrabold flex items-center gap-2">
+              <h1 className="text-base font-serif font-extrabold flex items-center gap-2 text-[#F7F5F0]">
                 Mesa {table.number}
-                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-orange-600 text-white">
+                <span className="text-[10px] tracking-wider font-sans font-bold px-2 py-0.5 rounded-full bg-[#DCD7CD] text-[#033225]">
                   Ronda {currentRound}
                 </span>
               </h1>
-              <p className="text-[11px] text-slate-400">Atiende: {waiter.name}</p>
+              <p className="text-[11px] text-[#DCD7CD]/70">Atiende: {waiter.name}</p>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
             <button
               onClick={handleAdvanceRound}
-              className="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-bold text-orange-400 flex items-center gap-1 border border-orange-500/30"
+              className="px-2.5 py-1.5 bg-[#02241A] hover:bg-[#011710] rounded-xl text-xs font-bold text-[#DCD7CD] flex items-center gap-1 border border-[#DCD7CD]/30"
               title="Añadir nueva tanda / ronda"
             >
               <Plus className="w-3.5 h-3.5" />
@@ -261,7 +261,7 @@ export const OrderPad: React.FC<OrderPadProps> = ({
             {existingOrder && (
               <button
                 onClick={() => onCloseOrderBill(existingOrder.id)}
-                className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold flex items-center gap-1"
+                className="px-3 py-1.5 bg-rose-700 hover:bg-rose-800 text-white rounded-xl text-xs font-bold flex items-center gap-1"
               >
                 <Receipt className="w-3.5 h-3.5" />
                 Pedir Cuenta
@@ -284,7 +284,7 @@ export const OrderPad: React.FC<OrderPadProps> = ({
                 placeholder="Buscar plato o bebida..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full text-xs pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl shadow-xs focus:ring-2 focus:ring-orange-500 focus:outline-hidden"
+                className="w-full text-xs pl-10 pr-4 py-2.5 bg-white border border-[#DCD7CD] rounded-xl shadow-xs focus:ring-2 focus:ring-[#033225] focus:outline-hidden"
               />
             </div>
 
@@ -293,8 +293,8 @@ export const OrderPad: React.FC<OrderPadProps> = ({
                 onClick={() => setSelectedCategory('ALL')}
                 className={`px-3 py-1.5 text-xs font-bold rounded-xl transition whitespace-nowrap cursor-pointer ${
                   selectedCategory === 'ALL'
-                    ? 'bg-orange-600 text-white shadow-xs'
-                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                    ? 'bg-[#033225] text-[#DCD7CD] shadow-xs'
+                    : 'bg-white text-[#675F52] border border-[#DCD7CD] hover:bg-[#F7F5F0]'
                 }`}
               >
                 Todos
@@ -305,8 +305,8 @@ export const OrderPad: React.FC<OrderPadProps> = ({
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`px-3 py-1.5 text-xs font-bold rounded-xl transition whitespace-nowrap cursor-pointer ${
                     selectedCategory === cat.id
-                      ? 'bg-orange-600 text-white shadow-xs'
-                      : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                      ? 'bg-[#033225] text-[#DCD7CD] shadow-xs'
+                      : 'bg-white text-[#675F52] border border-[#DCD7CD] hover:bg-[#F7F5F0]'
                   }`}
                 >
                   {cat.name}
@@ -323,26 +323,26 @@ export const OrderPad: React.FC<OrderPadProps> = ({
                 onClick={() => prod.isAvailable && handleAddProduct(prod)}
                 className={`p-3 rounded-2xl border transition-all flex flex-col justify-between select-none ${
                   prod.isAvailable
-                    ? 'bg-white border-slate-200/80 hover:border-orange-500 active:scale-98 cursor-pointer shadow-xs'
+                    ? 'bg-white border-[#DCD7CD] hover:border-[#033225] active:scale-98 cursor-pointer shadow-xs'
                     : 'bg-slate-100 border-slate-200 opacity-60 cursor-not-allowed'
                 }`}
                 style={{ minHeight: '130px' }}
               >
                 <div>
                   <div className="flex items-start justify-between gap-1 mb-1">
-                    <span className="text-xs font-extrabold text-slate-900 line-clamp-2">
+                    <span className="text-xs font-bold text-[#020202] line-clamp-2">
                       {prod.name}
                     </span>
                   </div>
-                  <p className="text-[10px] text-slate-400 line-clamp-1">{prod.description}</p>
+                  <p className="text-[10px] text-[#877E6F] line-clamp-1">{prod.description}</p>
                 </div>
 
                 <div className="pt-2 flex items-center justify-between mt-auto">
-                  <span className="text-xs font-extrabold text-orange-600">
+                  <span className="text-xs font-black text-[#033225]">
                     ${prod.price.toFixed(2)}
                   </span>
                   {prod.isAvailable ? (
-                    <span className="w-6 h-6 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center font-bold text-xs">
+                    <span className="w-6 h-6 rounded-lg bg-[#033225]/10 text-[#033225] flex items-center justify-center font-bold text-xs">
                       +
                     </span>
                   ) : (
@@ -357,13 +357,13 @@ export const OrderPad: React.FC<OrderPadProps> = ({
         </div>
 
         {/* Panel Lateral: Comanda Activa */}
-        <div className="w-full lg:w-96 bg-white border-t lg:border-t-0 lg:border-l border-slate-200 flex flex-col shadow-lg">
-          <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+        <div className="w-full lg:w-96 bg-white border-t lg:border-t-0 lg:border-l border-[#DCD7CD] flex flex-col shadow-lg">
+          <div className="p-4 border-b border-[#DCD7CD]/60 flex items-center justify-between bg-[#F7F5F0]">
             <div>
-              <h2 className="text-sm font-extrabold text-slate-900">Comanda en Curso</h2>
-              <span className="text-[11px] text-slate-400">{validItems.length} ítems activos</span>
+              <h2 className="text-sm font-serif font-bold text-[#033225]">Comanda en Curso</h2>
+              <span className="text-[11px] text-[#877E6F]">{validItems.length} ítems activos</span>
             </div>
-            <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700">
+            <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-[#033225] text-[#DCD7CD]">
               Ronda {currentRound}
             </span>
           </div>
@@ -483,27 +483,27 @@ export const OrderPad: React.FC<OrderPadProps> = ({
           </div>
 
           {/* Resumen de Cuenta y Botón Enviar */}
-          <div className="p-4 bg-slate-50 border-t border-slate-200 space-y-3">
-            <div className="space-y-1 text-xs text-slate-600">
+          <div className="p-4 bg-[#F7F5F0] border-t border-[#DCD7CD] space-y-3">
+            <div className="space-y-1 text-xs text-[#675F52]">
               <div className="flex justify-between">
                 <span>Subtotal:</span>
-                <span className="font-semibold text-slate-800">${subtotal.toFixed(2)}</span>
+                <span className="font-semibold text-[#020202]">${subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
-                <span>Impuesto (10%):</span>
-                <span className="font-semibold text-slate-800">${tax.toFixed(2)}</span>
+                <span>Servicio / Impuesto (10%):</span>
+                <span className="font-semibold text-[#020202]">${tax.toFixed(2)}</span>
               </div>
-              <div className="flex justify-between text-sm font-extrabold text-slate-900 pt-1 border-t border-slate-200">
-                <span>Total:</span>
-                <span className="text-orange-600">${total.toFixed(2)}</span>
+              <div className="flex justify-between text-sm font-extrabold text-[#020202] pt-1 border-t border-[#DCD7CD]">
+                <span className="font-serif">Total comanda:</span>
+                <span className="text-[#033225] font-black">${total.toFixed(2)}</span>
               </div>
             </div>
 
             <button
               onClick={handleSendToKitchen}
-              className="w-full py-3 bg-orange-600 hover:bg-orange-700 active:bg-orange-800 text-white font-extrabold text-sm rounded-xl transition flex items-center justify-center gap-2 shadow-md cursor-pointer"
+              className="w-full py-3 bg-[#033225] hover:bg-[#02241A] active:bg-[#011710] text-[#DCD7CD] font-bold text-xs uppercase tracking-wider rounded-xl transition flex items-center justify-center gap-2 shadow-md cursor-pointer border border-[#DCD7CD]/20"
             >
-              <Send className="w-4 h-4" />
+              <Send className="w-4 h-4 text-[#DCD7CD]" />
               Enviar Comanda a Cocina
             </button>
           </div>

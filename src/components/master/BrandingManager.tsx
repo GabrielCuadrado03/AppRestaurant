@@ -12,12 +12,12 @@ export const BrandingManager: React.FC<BrandingManagerProps> = ({
   onUpdateBranding
 }) => {
   const [formData, setFormData] = useState({
-    restaurantName: branding.restaurantName || 'SABOR & FUEGO',
+    restaurantName: branding.restaurantName || 'ORIGEN & BISTRO',
     logoUrl: branding.logoUrl || '',
-    primaryColor: branding.primaryColor || '#ea580c',
-    accentColor: branding.accentColor || '#f97316',
+    primaryColor: branding.primaryColor || '#033225',
+    accentColor: branding.accentColor || '#DCD7CD',
     contactPhone: branding.contactPhone || '+57 300 123 4567',
-    contactAddress: branding.contactAddress || 'Av. Principal #45-12'
+    contactAddress: branding.contactAddress || 'Reserva Natural & Jardín Botánico'
   });
 
   const [savedSuccess, setSavedSuccess] = useState(false);
