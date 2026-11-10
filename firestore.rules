@@ -1,0 +1,86 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Funciones auxiliares de autenticación y autorización
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isMasterAdmin() {
+      return isAuthenticated() && request.auth.token.masterAdmin == true;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (request.auth.token.admin == true || isMasterAdmin());
+    }
+
+    function isStaff() {
+      return isAuthenticated() && (
+        isMasterAdmin() ||
+        request.auth.token.admin == true ||
+        request.auth.token.role == 'admin' ||
+        request.auth.token.role == 'mesero' ||
+        request.auth.token.role == 'staff' ||
+        request.auth.token.role == 'cocina'
+      );
+    }
+
+    // 0. Configuración del Sistema y Licencia
+    match /system_config/{configId} {
+      // license y branding pueden leerse públicamente para renderizado del cliente y Kill Switch
+      allow read: if configId in ['license', 'branding'] || isMasterAdmin();
+      allow write: if isMasterAdmin();
+    }
+
+    // 1. Colecciones 'products' y 'categories': lectura pública, escritura admin o master
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin() || isMasterAdmin();
+    }
+
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin() || isMasterAdmin();
+    }
+
+    // 2. Colección 'orders': personal autorizado o master admin (permite limpieza en masa)
+    match /orders/{orderId} {
+      allow read: if isStaff() || isMasterAdmin();
+      allow create, update: if isStaff() || isMasterAdmin();
+      allow delete: if isAdmin() || isMasterAdmin();
+    }
+
+    // 3. Colección 'reviews': creación condicionada a que la orden exista y esté en DELIVERED o PAID
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if request.resource.data.orderId is string &&
+        exists(/databases/$(database)/documents/orders/$(request.resource.data.orderId)) &&
+        (
+          get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.status == 'DELIVERED' ||
+          get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.status == 'PAID'
+        );
+      allow update, delete: if isAdmin() || isMasterAdmin();
+    }
+
+    // 4. Colección 'inventory' y 'daily_analytics': privadas para staff autenticado o master
+    match /inventory/{itemId} {
+      allow read, write: if isStaff() || isMasterAdmin();
+    }
+
+    match /daily_analytics/{analyticsId} {
+      allow read, write: if isStaff() || isMasterAdmin();
+      allow delete: if isMasterAdmin();
+    }
+
+    // 5. Clientes/Customers
+    match /customers/{customerId} {
+      allow read, write: if isStaff() || isMasterAdmin();
+    }
+
+    // 6. Colección de auditorías o logs del sistema
+    match /audit_logs/{logId} {
+      allow read, write: if isMasterAdmin();
+    }
+  }
+}
