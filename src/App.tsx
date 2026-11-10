@@ -25,6 +25,7 @@ import {
   Sparkles,
   QrCode
 } from 'lucide-react';
+import { INITIAL_CATEGORIES, INITIAL_PRODUCTS } from './utils/mockData';
 
 const MASTER_ROUTE = (import.meta.env.VITE_MASTER_ROUTE || '/sys-core-x9a7').replace(/\/$/, '');
 
@@ -54,8 +55,8 @@ export const App: React.FC = () => {
     readOnly: false
   });
 
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
+  const [categories, setCategories] = useState<Category[]>(INITIAL_CATEGORIES);
   const [license, setLicense] = useState<SystemLicense | null>(null);
   const [branding, setBranding] = useState<SystemBranding | null>(null);
 
@@ -86,17 +87,17 @@ export const App: React.FC = () => {
     return () => unsub();
   }, []);
 
-  // 3. Suscripción compartida para Menú y Categorías
+  // 3. Suscripción compartida para Menú y Categorías con fallback
   useEffect(() => {
     const unsubCat = onSnapshot(collection(db, 'categories'), (snapshot) => {
       const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() })) as Category[];
-      setCategories(data);
-    });
+      if (data.length > 0) setCategories(data);
+    }, (err) => console.warn('Categories fallback a datos iniciales:', err));
 
     const unsubProd = onSnapshot(collection(db, 'products'), (snapshot) => {
       const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() })) as Product[];
-      setProducts(data);
-    });
+      if (data.length > 0) setProducts(data);
+    }, (err) => console.warn('Products fallback a datos iniciales:', err));
 
     return () => {
       unsubCat();

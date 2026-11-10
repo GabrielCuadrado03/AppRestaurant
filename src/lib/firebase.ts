@@ -10,39 +10,45 @@ import {
 import { getAuth } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || import.meta.env?.VITE_FIREBASE_API_KEY || '',
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || import.meta.env?.VITE_FIREBASE_AUTH_DOMAIN || '',
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || import.meta.env?.VITE_FIREBASE_PROJECT_ID || '',
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || import.meta.env?.VITE_FIREBASE_STORAGE_BUCKET || '',
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || import.meta.env?.VITE_FIREBASE_MESSAGING_SENDER_ID || '',
-  appId: process.env.REACT_APP_FIREBASE_APP_ID || import.meta.env?.VITE_FIREBASE_APP_ID || ''
+// Acceso seguro a variables de Vite sin ReferenceError por process
+const getEnvVar = (viteKey: string, fallback = '') => {
+  if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[viteKey]) {
+    return import.meta.env[viteKey];
+  }
+  return fallback;
 };
 
-// Inicialización de Firebase App
+const firebaseConfig = {
+  apiKey: getEnvVar('VITE_FIREBASE_API_KEY', 'AIzaSyDemoRestaurantMockKeyForLocalDev123'),
+  authDomain: getEnvVar('VITE_FIREBASE_AUTH_DOMAIN', 'restaurant-app-demo.firebaseapp.com'),
+  projectId: getEnvVar('VITE_FIREBASE_PROJECT_ID', 'restaurant-app-demo'),
+  storageBucket: getEnvVar('VITE_FIREBASE_STORAGE_BUCKET', 'restaurant-app-demo.appspot.com'),
+  messagingSenderId: getEnvVar('VITE_FIREBASE_MESSAGING_SENDER_ID', '123456789012'),
+  appId: getEnvVar('VITE_FIREBASE_APP_ID', '1:123456789012:web:abcdef1234567890')
+};
+
+// Inicialización de Firebase App segura
 export const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 
-// Inicialización de Firestore con persistencia IndexedDB habilitada
+// Inicialización de Firestore con persistencia IndexedDB habilitada y manejo de fallbacks
 let firestoreInstance: Firestore;
 
 try {
-  // Enfoque moderno recomendado en Firebase v9+ / v10+
   firestoreInstance = initializeFirestore(app, {
     localCache: persistentLocalCache({
       tabManager: persistentMultipleTabManager()
     })
   });
 } catch (error) {
-  // Fallback usando getFirestore y enableIndexedDbPersistence
   firestoreInstance = getFirestore(app);
   if (typeof window !== 'undefined') {
     enableIndexedDbPersistence(firestoreInstance).catch((err) => {
       if (err.code === 'failed-precondition') {
-        console.warn('Persistencia de Firestore falló: Múltiples pestañas abiertas al mismo tiempo.');
+        console.warn('Persistencia de Firestore: Múltiples pestañas abiertas.');
       } else if (err.code === 'unimplemented') {
-        console.warn('El navegador no soporta persistencia IndexedDB para Firestore.');
+        console.warn('Persistencia IndexedDB no soportada en este entorno.');
       } else {
-        console.error('Error al inicializar la persistencia offline:', err);
+        console.warn('Aviso de persistencia offline:', err);
       }
     });
   }
